@@ -1,0 +1,16 @@
+---
+networks:
+  rev-proxy:
+    name: net_rev-proxy
+    external: true
+
+services:
+  whoami:
+    image: traefik/whoami
+    networks:
+      - rev-proxy
+    # ports:
+    #   - 8080:8080
+    command:
+       - --port=8080
+       - --name=iamfoo
