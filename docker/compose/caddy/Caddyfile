@@ -1,0 +1,55 @@
+#========================================================================================#
+##
+# Global settings
+##
+{
+        # admin :2019 {
+        #       origins localhost
+        #       enforce_origin
+        # }
+        log {
+                output file /var/log/caddy/caddy.log {
+                        roll_size 250MB
+                        roll_keep 20
+                        roll_keep_for 2160h
+                }
+                format json {
+                        time_format iso8601
+                }
+                level INFO
+        }
+}
+#========================================================================================#
+##
+# Classes
+##
+(default) {
+        encode {
+                gzip 4
+                zstd
+        }
+        header {
+                Permissions-Policy interest-cohort=()
+                X-Content-Type-Options nosniff
+                X-Frame-Options SAMEORIGIN
+                Referrer-Policy no-referrer-when-downgrade
+                X-XSS-Protection "1; mode=block"
+                X-Download-Options noopen
+        }
+}
+#========================================================================================#
+##
+# Sub-Domains
+##
+demo.example.com {
+	import default
+        reverse_proxy localhost:8080 {
+                # header_up X-Real-IP {remote_host} # if service needs X-Real-IP header
+                # header_up -X-Forwarded-For # (optional) enable when using X-Real-IP header
+                header_up -Via
+                header_up -Server
+        }
+	tls /etc/ssl/demo.example.com.crt /etc/ssl/demo.example.com.key
+}
+
+#========================================================================================#

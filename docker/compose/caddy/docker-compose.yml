@@ -1,0 +1,36 @@
+---
+volumes:
+  data:
+  data_config:
+  data_logs:
+
+networks:
+  rev-proxy:
+    name: net_rev-proxy
+    external: true
+
+services:
+  caddy:
+    image: caddy:2.10-alpine
+    container_name: caddy
+    restart: always
+    security_opt:
+      - "no-new-privileges=true"
+    # network_mode: host # (optional) when running caddy in network host mode. However disable "networkrs", "cap_add" and "ports" when doing so
+    networks:
+      - rev-proxy
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+    #   - "443:443/udp" # (optional) when running http/3
+    #   - "2019:2019" # (optional) when using caddy api
+    volumes:
+      - /etc/caddy/Caddyfile:/etc/caddy/Caddyfile # optional to use the ":ro" value at the end, this however limits caddy
+      - /etc/caddy/ssl:/etc/ssl:ro 
+      - data:/data
+      - data_config:/config
+      - data_logs:/var/log/caddy
+    environment:
+      TZ: Europe/Berlin
