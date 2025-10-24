@@ -54,4 +54,5 @@ docker compose exec -w /etc/caddy caddy caddy fmt --overwrite
 A list of ressources:
 
 🔗 [Caddy docs](https://caddyserver.com/docs/) \
-🔗 [Docker hub - Caddy](https://hub.docker.com/_/caddy)
+🔗 [Docker hub - Caddy](https://hub.docker.com/_/caddy) \
+🔗 [GitHub](https://github.com/caddyserver/caddy)
