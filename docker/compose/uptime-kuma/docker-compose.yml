@@ -1,0 +1,25 @@
+---
+volumes:
+  data:
+networks:
+  rev-proxy:
+    name: net_rev-proxy
+    external: true
+
+services:
+  monitoring-02:
+    image: louislam/uptime-kuma:latest
+    container_name: ${CONTAINER_NAME}
+    restart: always
+    security_opt:
+      - "no-new-privileges=true"
+    networks:
+      - rev-proxy
+    # ports:
+      # - ${PORT_01}:3001
+    # environment:
+      # NODE_EXTRA_CA_CERTS: "/etc/ssl/CA_demo.example.com.crt"  # When using self signed certs in your monitored infrastructure
+    volumes:
+      - data:/app/data
+      # - /usr/local/share/ca-certificates/CA_demo.example.com.crt:/etc/ssl/CA_demo.example.com.crt:ro  # When using self signed certs in your monitored infrastructure
+      # - /var/run/docker.sock:/var/run/docker.sock:ro  # When monitoring local docker
